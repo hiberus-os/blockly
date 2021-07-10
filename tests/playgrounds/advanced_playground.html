@@ -4,57 +4,12 @@
 <meta charset="utf-8">
 <title>Advanced Blockly Playground</title>
 <script src="../../blockly_uncompressed.js"></script>
-<script src="../../generators/javascript.js"></script>
-<script src="../../generators/javascript/logic.js"></script>
-<script src="../../generators/javascript/loops.js"></script>
-<script src="../../generators/javascript/math.js"></script>
-<script src="../../generators/javascript/text.js"></script>
-<script src="../../generators/javascript/lists.js"></script>
-<script src="../../generators/javascript/colour.js"></script>
-<script src="../../generators/javascript/variables.js"></script>
-<script src="../../generators/javascript/variables_dynamic.js"></script>
-<script src="../../generators/javascript/procedures.js"></script>
-<script src="../../generators/python.js"></script>
-<script src="../../generators/python/logic.js"></script>
-<script src="../../generators/python/loops.js"></script>
-<script src="../../generators/python/math.js"></script>
-<script src="../../generators/python/text.js"></script>
-<script src="../../generators/python/lists.js"></script>
-<script src="../../generators/python/colour.js"></script>
-<script src="../../generators/python/variables.js"></script>
-<script src="../../generators/python/variables_dynamic.js"></script>
-<script src="../../generators/python/procedures.js"></script>
-<script src="../../generators/php.js"></script>
-<script src="../../generators/php/logic.js"></script>
-<script src="../../generators/php/loops.js"></script>
-<script src="../../generators/php/math.js"></script>
-<script src="../../generators/php/text.js"></script>
-<script src="../../generators/php/lists.js"></script>
-<script src="../../generators/php/colour.js"></script>
-<script src="../../generators/php/variables.js"></script>
-<script src="../../generators/php/variables_dynamic.js"></script>
-<script src="../../generators/php/procedures.js"></script>
-<script src="../../generators/lua.js"></script>
-<script src="../../generators/lua/logic.js"></script>
-<script src="../../generators/lua/loops.js"></script>
-<script src="../../generators/lua/math.js"></script>
-<script src="../../generators/lua/text.js"></script>
-<script src="../../generators/lua/lists.js"></script>
-<script src="../../generators/lua/colour.js"></script>
-<script src="../../generators/lua/variables.js"></script>
-<script src="../../generators/lua/variables_dynamic.js"></script>
-<script src="../../generators/lua/procedures.js"></script>
-<script src="../../generators/dart.js"></script>
-<script src="../../generators/dart/logic.js"></script>
-<script src="../../generators/dart/loops.js"></script>
-<script src="../../generators/dart/math.js"></script>
-<script src="../../generators/dart/text.js"></script>
-<script src="../../generators/dart/lists.js"></script>
-<script src="../../generators/dart/colour.js"></script>
-<script src="../../generators/dart/variables.js"></script>
-<script src="../../generators/dart/variables_dynamic.js"></script>
-<script src="../../generators/dart/procedures.js"></script>
+<!--
+<script src="./custom_blocks.js"></script>
+-->
+<script src="./custom_generator.js"></script>
 <script src="../../msg/messages.js"></script>
+<script src="../../blocks_compressed.js"></script>
 <script src="../../blocks/logic.js"></script>
 <script src="../../blocks/loops.js"></script>
 <script src="../../blocks/math.js"></script>
@@ -68,6 +23,13 @@
 <script src="./screenshot.js"></script>
 <script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
 <script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
+
+<!--
+<script src="../../blockly_compressed.js"></script>
+<script src="../../javascript_compressed.js"></script>
+<script src="../../msg/js/en.js"></script>
+-->
+
 
 <script>
 // Custom requires for the playground.
@@ -95,6 +57,7 @@ function createWorkspace(blocklyDiv, options) {
 
 function configurePlayground(playground) {
   // Rendering options.
+  playground.addGenerator('Codelab', codelabGenerator);
   var gui = playground.getGUI();
   var renderingFolder = gui.addFolder('Rendering');
   var renderingOptions = {
@@ -160,6 +123,17 @@ function initPlayground() {
       'categories': toolboxCategories,
       'simple': toolboxSimple,
       'test blocks': toolboxTestBlocks,
+      'custom blocks': `
+<xml id="toolbox" style="display: none">
+<block type="object"/>
+<block type="member"></block>
+<block type="math_number"><field name="NUM">0</field></block>
+<block type="text"><field name="TEXT"/></block>
+<block type="logic_boolean"><field name="BOOL">TRUE</field></block>
+<block type="logic_null"/>
+<block type="lists_create_with"><mutation items="3"/></block>
+</xml>
+`,
     }
   }
 
