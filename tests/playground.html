@@ -368,15 +368,7 @@ var spaghettiXml = [
     &nbsp;
     <input type="button" value="Import from XML" onclick="fromXml()" id="import">
     <br>
-    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
-    <input type="button" value="To Python" onclick="toCode('Python')">
-    &nbsp;
-    <input type="button" value="To PHP" onclick="toCode('PHP')">
-    &nbsp;
-    <input type="button" value="To Lua" onclick="toCode('Lua')">
-    &nbsp;
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
+    <input type="button" value="To Arduino" onclick="toCode('Arduino')">
     <br>
     <textarea id="importExport" style="width: 26%; height: 12em"
       onchange="taChange();" onkeyup="taChange()"></textarea>
@@ -407,7 +399,7 @@ var spaghettiXml = [
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
     <block type="controls_ifelse"></block>
     <block type="logic_compare"></block>
-    <!-- <block type="control_repeat"></block> -->
+    <block type="control_repeat"></block>
     <block type="logic_operation"></block>
     <block type="controls_repeat_ext">
       <value name="TIMES">
@@ -434,17 +426,6 @@ var spaghettiXml = [
   Variables category uses untyped variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#untyped_variable_blocks for more information. -->
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
-
-            <!-- LOGIC -->
-    <category name="Logic" categorystyle="logic_category">
-      <block type="controls_if"></block>
-      <block type="logic_compare"></block>
-      <block type="logic_operation"></block>
-      <block type="logic_negate"></block>
-      <block type="logic_boolean"></block>
-      <block type="logic_null" disabled="true"></block>
-      <block type="logic_ternary"></block>
-    </category>
             <category name="Lógica" colour="210">
                 <block type="controls_if"></block>
                 <block type="logic_compare"></block>
@@ -454,7 +435,6 @@ var spaghettiXml = [
                 <block type="logic_boolean"></block>
                 <block type="logic_boolean_io"></block>
             </category>
-
             <category name="Control" colour="120">
                 <block type="controls_repeat_ext">
                     <value name="TIMES">
@@ -485,9 +465,7 @@ var spaghettiXml = [
                 </block>
                 <block type="control_wait_whileUntil"></block>
                 <block type="control_group"></block>
-
             </category>
-
 <!--
             <category name="Matemáticas" colour="240">
                 <block type="math_number"></block>
@@ -2038,6 +2016,7 @@ var spaghettiXml = [
   <!-- toolbox-categories-typed-variables has a category menu and an
   auto-closing flyout.  The Variables category uses typed variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#typed_variable_blocks for more information. -->
+<!--
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories-typed-variables" style="display: none">
     <category name="Logic" categorystyle="logic_category">
       <block type="controls_if"></block>
@@ -2376,5 +2355,6 @@ var spaghettiXml = [
     <category name="Variables" categorystyle="variable_category" custom="VARIABLE_DYNAMIC"></category>
     <category name="Functions" categorystyle="procedure_category" custom="PROCEDURE"></category>
   </xml>
+-->
 </body>
 </html>

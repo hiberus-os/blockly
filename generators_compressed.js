@@ -1588,7 +1588,7 @@ Blockly.Arduino.init = function(a) {
     Blockly.Arduino.oled_count = 0;
     Blockly.Arduino.extra_data = Object.create(null);
     Blockly.Arduino.definitions_ =
-        Object.create(null);
+    Object.create(null);
     Blockly.Arduino.definitions_fnc_ = Object.create(null);
     Blockly.Arduino.setups0_ = Object.create(null);
     Blockly.Arduino.setups_ = Object.create(null);
@@ -1596,18 +1596,30 @@ Blockly.Arduino.init = function(a) {
     Blockly.Arduino.mqtt_sub_ = Object.create(null);
     Blockly.Arduino.functionNames_ = Object.create(null);
     if (Blockly.Variables) {
-        Blockly.Arduino.variableDB_ ? (Blockly.Arduino.variableDB_.reset(), Blockly.Arduino.variableDB_Text_.reset(), Blockly.Arduino.variableDB_Bool_.reset()) : (Blockly.Arduino.variableDB_ =
-            new Blockly.Names(Blockly.Arduino.RESERVED_WORDS_), Blockly.Arduino.variableDB_Text_ = new Blockly.Names(Blockly.Arduino.RESERVED_WORDS_), Blockly.Arduino.variableDB_Bool_ = new Blockly.Names(Blockly.Arduino.RESERVED_WORDS_));
-        for (var b = [], c = Blockly.Variables.allVariables(a), d = 0; d < c.length; d++) b[d] = "double " + Blockly.Arduino.variableDB_.getName(c[d], Blockly.Variables.NAME_TYPE) + ";";
+        Blockly.Arduino.nameDB_ ? 
+          (Blockly.Arduino.nameDB_.reset(), 
+           Blockly.Arduino.nameDB_Text_.reset(), 
+           Blockly.Arduino.nameDB_Bool_.reset()) 
+        : 
+          (Blockly.Arduino.nameDB_ = new Blockly.Names(Blockly.Arduino.RESERVED_WORDS_), 
+                                         Blockly.Arduino.nameDB_Text_ = new Blockly.Names(Blockly.Arduino.RESERVED_WORDS_), 
+                                         Blockly.Arduino.nameDB_Bool_ = new Blockly.Names(Blockly.Arduino.RESERVED_WORDS_));
+
+        Blockly.Arduino.nameDB_.setVariableMap(workspace.getVariableMap());
+        for (var b = [], c = Blockly.Variables.allVariables(a), d = 0; d < c.length; d++) 
+           b[d] = "double " + Blockly.Arduino.nameDB_.getName(c[d], Blockly.Variables.NAME_TYPE) + ";";
+
         Blockly.Arduino.definitions_.variables = b.join("\n") + "\n";
         b = Blockly.Variables.allVariablesText(a);
         c = [];
+
         for (d = 0; d < b.length; d++) c[d] =
-            "String s_" + Blockly.Arduino.variableDB_Text_.getName(b[d], Blockly.Variables.NAME_TYPE) + ";";
+            "String s_" + Blockly.Arduino.nameDB_Text_.getName(b[d], Blockly.Variables.NAME_TYPE) + ";";
+
         Blockly.Arduino.definitions_.variables_text = c.join("\n") + "\n";
         a = Blockly.Variables.allVariablesBool(a);
         b = [];
-        for (d = 0; d < a.length; d++) b[d] = "boolean b_" + Blockly.Arduino.variableDB_Bool_.getName(a[d], Blockly.Variables.NAME_TYPE) + ";";
+        for (d = 0; d < a.length; d++) b[d] = "boolean b_" + Blockly.Arduino.nameDB_Bool_.getName(a[d], Blockly.Variables.NAME_TYPE) + ";";
         Blockly.Arduino.definitions_.variables_bool = b.join("\n") + "\n"
     }
 };
@@ -1688,7 +1700,7 @@ Blockly.Arduino.control_arduino_setup = function() {
     return null
 };
 Blockly.Arduino.controls_for = function() {
-    var a = Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
+    var a = Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
         b = Blockly.Arduino.valueToCode(this, "FROM", Blockly.Arduino.ORDER_ASSIGNMENT) || "0",
         c = Blockly.Arduino.valueToCode(this, "TO", Blockly.Arduino.ORDER_ASSIGNMENT) || "0",
         d = Blockly.Arduino.valueToCode(this, "BY", Blockly.Arduino.ORDER_ASSIGNMENT) || "0",
@@ -1701,9 +1713,9 @@ Blockly.Arduino.controls_for = function() {
     } else {
         f = "";
         var g = b;
-        b.match(/^\w+$/) || b.match(/^-?\d+(\.\d+)?$/) || (g = Blockly.Arduino.variableDB_.getDistinctName(a + "_start", Blockly.Variables.NAME_TYPE), f += "int " + g + " = " + b + ";\n");
+        b.match(/^\w+$/) || b.match(/^-?\d+(\.\d+)?$/) || (g = Blockly.Arduino.nameDB_.getDistinctName(a + "_start", Blockly.Variables.NAME_TYPE), f += "int " + g + " = " + b + ";\n");
         b = c;
-        c.match(/^\w+$/) || c.match(/^-?\d+(\.\d+)?$/) || (b = Blockly.Arduino.variableDB_.getDistinctName(a + "_end", Blockly.Variables.NAME_TYPE),
+        c.match(/^\w+$/) || c.match(/^-?\d+(\.\d+)?$/) || (b = Blockly.Arduino.nameDB_.getDistinctName(a + "_end", Blockly.Variables.NAME_TYPE),
             f += "int " + b + " = " + c + ";\n");
         f += "for (" + a + " = " + g + ";\n    (" + g + " <= " + b + ") ? " + a + " <= " + b + " : " + a + " >= " + b + ";\n    " + a + " += (" + g + " <= " + b + ") ? +" + d + " : -" + d + ") {\n" + e + "}\n"
     }
@@ -1713,14 +1725,14 @@ Blockly.Arduino.controls_repeat_ext = function() {
     var a = Blockly.Arduino.valueToCode(this, "TIMES", Blockly.Arduino.ORDER_ASSIGNMENT) || "0",
         b = Blockly.Arduino.statementToCode(this, "DO");
     Blockly.Arduino.INFINITE_LOOP_TRAP && (b = Blockly.Arduino.INFINITE_LOOP_TRAP.replace(/%1/g, "'" + this.id + "'") + b);
-    var c = Blockly.Arduino.variableDB_.getName("count", Blockly.Variables.NAME_TYPE);
+    var c = Blockly.Arduino.nameDB_.getName("count", Blockly.Variables.NAME_TYPE);
     return "for (int " + c + " = 0; " + c + " < " + a + "; " + c + "++) {\n" + b + "}\n"
 };
 Blockly.Arduino.controls_whileUntil = function() {
     var a = Blockly.Arduino.valueToCode(this, "BOOL", Blockly.Arduino.ORDER_NONE) || "false",
         b = Blockly.Arduino.statementToCode(this, "DO");
     Blockly.Arduino.INFINITE_LOOP_TRAP && (b = Blockly.Arduino.INFINITE_LOOP_TRAP.replace(/%1/g, "'" + this.id + "'") + b);
-    "UNTIL" == this.getTitleValue("MODE") && (a.match(/^\w+$/) || (a = "(" + a + ")"), a = "!" + a);
+    "UNTIL" == this.getFieldValue("MODE") && (a.match(/^\w+$/) || (a = "(" + a + ")"), a = "!" + a);
     return "while (" + a + ") {\n" + b + "}\n"
 };
 Blockly.Arduino.control_wait_whileUntil = function() {
@@ -1730,49 +1742,49 @@ Blockly.Arduino.control_wait_whileUntil = function() {
 Blockly.Arduino.lists = {};
 Blockly.Arduino.lists_create_with = function() {
     this.getFieldValue("TYPE");
-    for (var a = Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE), b = this.itemCount_, c = Array(this.itemCount_), d = 0; d < this.itemCount_; d++) c[d] = Blockly.Arduino.valueToCode(this, "ADD" + d, Blockly.Arduino.ORDER_NONE) || "0";
+    for (var a = Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE), b = this.itemCount_, c = Array(this.itemCount_), d = 0; d < this.itemCount_; d++) c[d] = Blockly.Arduino.valueToCode(this, "ADD" + d, Blockly.Arduino.ORDER_NONE) || "0";
     Blockly.Arduino.definitions_["var_ld_" + a] = "double ld_" + a + "[" + b + "]={" + c.join(", ") + "};\n";
     Blockly.Arduino.definitions_["var_ld_" + a + "_size"] = "int ld_" + a + "_size=" + b + ";\n";
     return ""
 };
 Blockly.Arduino.lists_getIndex = function() {
-    var a = Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
+    var a = Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
         b = Blockly.Arduino.valueToCode(this, "AT", Blockly.Arduino.ORDER_ADDITIVE) || "0";
     b.match(/^\d+$/) && (b = parseInt(b, 10));
     return ["ld_" + a + "[(int)(" + b + ")]", Blockly.Arduino.ORDER_ATOMIC]
 };
 Blockly.Arduino.lists_setIndex = function() {
-    var a = Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
+    var a = Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
         b = Blockly.Arduino.valueToCode(this, "AT", Blockly.Arduino.ORDER_ADDITIVE) || "0",
         c = Blockly.Arduino.valueToCode(this, "TO", Blockly.Arduino.ORDER_ASSIGNMENT) || "0";
     b.match(/^\d+$/) && (b = parseInt(b, 10));
     return "ld_" + a + "[(int)(" + b + ")] = " + c + ";\n"
 };
 Blockly.Arduino.lists_length = function() {
-    return ["ld_" + Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE) + "_size", Blockly.Arduino.ORDER_ATOMIC]
+    return ["ld_" + Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE) + "_size", Blockly.Arduino.ORDER_ATOMIC]
 };
 Blockly.Arduino.lists_create_with_text = function() {
     this.getFieldValue("TYPE");
-    for (var a = Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE), b = this.itemCount_, c = Array(this.itemCount_), d = 0; d < this.itemCount_; d++) c[d] = Blockly.Arduino.valueToCode(this, "ADD" + d, Blockly.Arduino.ORDER_NONE) || 'String("")';
+    for (var a = Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE), b = this.itemCount_, c = Array(this.itemCount_), d = 0; d < this.itemCount_; d++) c[d] = Blockly.Arduino.valueToCode(this, "ADD" + d, Blockly.Arduino.ORDER_NONE) || 'String("")';
     Blockly.Arduino.definitions_["var_ls_" + a] = "String ls_" + a + "[" + b + "]={" + c.join(", ") + "};\n";
     Blockly.Arduino.definitions_["var_ls_" + a + "_size"] = "int ls_" + a + "_size=" + b + ";\n";
     return ""
 };
 Blockly.Arduino.lists_getIndex_text = function() {
-    var a = Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
+    var a = Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
         b = Blockly.Arduino.valueToCode(this, "AT", Blockly.Arduino.ORDER_ADDITIVE) || "0";
     b.match(/^\d+$/) && (b = parseInt(b, 10));
     return ["ls_" + a + "[(int)(" + b + ")]", Blockly.Arduino.ORDER_ATOMIC]
 };
 Blockly.Arduino.lists_setIndex_text = function() {
-    var a = Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
+    var a = Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
         b = Blockly.Arduino.valueToCode(this, "AT", Blockly.Arduino.ORDER_ADDITIVE) || "0",
         c = Blockly.Arduino.valueToCode(this, "TO", Blockly.Arduino.ORDER_ASSIGNMENT) || "0";
     b.match(/^\d+$/) && (b = parseInt(b, 10));
     return "ls_" + a + "[(int)(" + b + ")] = " + c + ";\n"
 };
 Blockly.Arduino.lists_length_text = function() {
-    return ["ls_" + Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE) + "_size", Blockly.Arduino.ORDER_ATOMIC]
+    return ["ls_" + Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE) + "_size", Blockly.Arduino.ORDER_ATOMIC]
 };
 Blockly.Arduino.logic = {};
 Blockly.Arduino.controls_if = function() {
@@ -1920,7 +1932,7 @@ Blockly.Arduino.math_single = function() {
 };
 Blockly.Arduino.math_change = function() {
     var a = Blockly.Arduino.valueToCode(this, "DELTA", Blockly.Arduino.ORDER_ADDITIVE) || "0",
-        b = Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE);
+        b = Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE);
     return b + "=" + b + "+(" + a + ");\n"
 };
 Blockly.Arduino.math_round = Blockly.Arduino.math_single;
@@ -1954,12 +1966,12 @@ Blockly.Arduino.math_random_int = function() {
 };
 Blockly.Arduino.procedures = {};
 Blockly.Arduino.procedures_defreturn = function() {
-    var a = Blockly.Arduino.variableDB_.getName(this.getFieldValue("NAME"), Blockly.Procedures.NAME_TYPE),
+    var a = Blockly.Arduino.nameDB_.getName(this.getFieldValue("NAME"), Blockly.Procedures.NAME_TYPE),
         b = Blockly.Arduino.statementToCode(this, "STACK");
     Blockly.Arduino.INFINITE_LOOP_TRAP && (b = Blockly.Arduino.INFINITE_LOOP_TRAP.replace(/%1/g, "'" + this.id + "'") + b);
     var c = Blockly.Arduino.valueToCode(this, "RETURN", Blockly.Arduino.ORDER_NONE) || "";
     c && (c = "  return " + c + ";\n");
-    for (var d = c ? "double" : "void", e = [], f = 0; f < this.arguments_.length; f++) e[f] = "double " + Blockly.Arduino.variableDB_.getName(this.arguments_[f],
+    for (var d = c ? "double" : "void", e = [], f = 0; f < this.arguments_.length; f++) e[f] = "double " + Blockly.Arduino.nameDB_.getName(this.arguments_[f],
         Blockly.Variables.NAME_TYPE);
     b = d + " " + a + "(" + e.join(", ") + ") {\n" + b + c + "}\n";
     b = Blockly.Arduino.scrub_(this, b);
@@ -1968,11 +1980,11 @@ Blockly.Arduino.procedures_defreturn = function() {
 };
 Blockly.Arduino.procedures_defnoreturn = Blockly.Arduino.procedures_defreturn;
 Blockly.Arduino.procedures_callreturn = function() {
-    for (var a = Blockly.Arduino.variableDB_.getName(this.getFieldValue("NAME"), Blockly.Procedures.NAME_TYPE), b = [], c = 0; c < this.arguments_.length; c++) b[c] = Blockly.Arduino.valueToCode(this, "ARG" + c, Blockly.Arduino.ORDER_NONE) || "null";
+    for (var a = Blockly.Arduino.nameDB_.getName(this.getFieldValue("NAME"), Blockly.Procedures.NAME_TYPE), b = [], c = 0; c < this.arguments_.length; c++) b[c] = Blockly.Arduino.valueToCode(this, "ARG" + c, Blockly.Arduino.ORDER_NONE) || "null";
     return [a + "(" + b.join(", ") + ")", Blockly.Arduino.ORDER_UNARY_POSTFIX]
 };
 Blockly.Arduino.procedures_callnoreturn = function() {
-    for (var a = Blockly.Arduino.variableDB_.getName(this.getFieldValue("NAME"), Blockly.Procedures.NAME_TYPE), b = [], c = 0; c < this.arguments_.length; c++) b[c] = Blockly.Arduino.valueToCode(this, "ARG" + c, Blockly.Arduino.ORDER_NONE) || "null";
+    for (var a = Blockly.Arduino.nameDB_.getName(this.getFieldValue("NAME"), Blockly.Procedures.NAME_TYPE), b = [], c = 0; c < this.arguments_.length; c++) b[c] = Blockly.Arduino.valueToCode(this, "ARG" + c, Blockly.Arduino.ORDER_NONE) || "null";
     return a + "(" + b.join(", ") + ");\n"
 };
 Blockly.Arduino.texts = {};
@@ -2044,24 +2056,24 @@ Blockly.Arduino.text_ascii = function(a) {
 Blockly.Arduino.variables = {};
 Blockly.Arduino.variables_set = function() {
     var a = Blockly.Arduino.valueToCode(this, "VALUE", Blockly.Arduino.ORDER_ASSIGNMENT) || "0";
-    return Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE) + " = " + a + ";\n"
+    return Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE) + " = " + a + ";\n"
 };
 Blockly.Arduino.variables_get = function() {
-    return [Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE), Blockly.Arduino.ORDER_ATOMIC]
+    return [Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE), Blockly.Arduino.ORDER_ATOMIC]
 };
 Blockly.Arduino.variables_set_text = function() {
     var a = Blockly.Arduino.valueToCode(this, "VALUE", Blockly.Arduino.ORDER_ASSIGNMENT) || '""';
-    return "s_" + Blockly.Arduino.variableDB_Text_.getName(this.getFieldValue("VARTEXT"), Blockly.Variables.NAME_TYPE) + " = " + a + ";\n"
+    return "s_" + Blockly.Arduino.nameDB_Text_.getName(this.getFieldValue("VARTEXT"), Blockly.Variables.NAME_TYPE) + " = " + a + ";\n"
 };
 Blockly.Arduino.variables_get_text = function() {
-    return ["s_" + Blockly.Arduino.variableDB_Text_.getName(this.getFieldValue("VARTEXT"), Blockly.Variables.NAME_TYPE), Blockly.Arduino.ORDER_ATOMIC]
+    return ["s_" + Blockly.Arduino.nameDB_Text_.getName(this.getFieldValue("VARTEXT"), Blockly.Variables.NAME_TYPE), Blockly.Arduino.ORDER_ATOMIC]
 };
 Blockly.Arduino.variables_set_bool = function() {
     var a = Blockly.Arduino.valueToCode(this, "VALUE", Blockly.Arduino.ORDER_ASSIGNMENT) || "false";
-    return "b_" + Blockly.Arduino.variableDB_Bool_.getName(this.getFieldValue("VARBOOL"), Blockly.Variables.NAME_TYPE) + " = " + a + ";\n"
+    return "b_" + Blockly.Arduino.nameDB_Bool_.getName(this.getFieldValue("VARBOOL"), Blockly.Variables.NAME_TYPE) + " = " + a + ";\n"
 };
 Blockly.Arduino.variables_get_bool = function() {
-    return ["b_" + Blockly.Arduino.variableDB_Bool_.getName(this.getFieldValue("VARBOOL"), Blockly.Variables.NAME_TYPE), Blockly.Arduino.ORDER_ATOMIC]
+    return ["b_" + Blockly.Arduino.nameDB_Bool_.getName(this.getFieldValue("VARBOOL"), Blockly.Variables.NAME_TYPE), Blockly.Arduino.ORDER_ATOMIC]
 };
 Blockly.Arduino._3dbot_move = function() {
     var a = this.getFieldValue("MOV"),
@@ -3031,7 +3043,7 @@ Blockly.Arduino.gps_distancebetween = function() {
 };
 Blockly.Arduino.io = {};
 Blockly.Arduino.io_pinmode = function() {
-    var a = Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
+    var a = Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
         b = this.getFieldValue("MODE");
     return "pinMode(" + a + "," + b + ");\n"
 };
@@ -3969,14 +3981,14 @@ Blockly.Arduino.mqtt_pub = function() {
 };
 Blockly.Arduino.mqtt_sub = function() {
     var a = Blockly.Arduino.valueToCode(this, "TOPIC", Blockly.Arduino.ORDER_UNARY_POSTFIX) || "''",
-        b = Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE);
+        b = Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE);
     Blockly.Arduino.mqtt_sub_[a] = b;
     "esp8266" == profile["default"].micro ? setupMQTT_ESP() : "esp32" == profile["default"].micro ? setupMQTT_ESP32() : setupMQTT("", 0, 0);
     return ""
 };
 Blockly.Arduino.mqtt_sub_text = function() {
     var a = Blockly.Arduino.valueToCode(this, "TOPIC", Blockly.Arduino.ORDER_UNARY_POSTFIX) || "''",
-        b = Blockly.Arduino.variableDB_Text_.getName(this.getFieldValue("VARTEXT"), Blockly.Variables.NAME_TYPE);
+        b = Blockly.Arduino.nameDB_Text_.getName(this.getFieldValue("VARTEXT"), Blockly.Variables.NAME_TYPE);
     Blockly.Arduino.mqtt_sub_[a] = "s_" + b;
     "esp8266" == profile["default"].micro ? setupMQTT_ESP() : "esp32" == profile["default"].micro ? setupMQTT_ESP32() : setupMQTT("", 0, 0);
     return ""
@@ -4530,7 +4542,7 @@ Blockly.Arduino.sd_readbyte = function() {
 };
 Blockly.Arduino.sd_readloop = function() {
     var a = Blockly.Arduino.valueToCode(this, "FILE", Blockly.Arduino.ORDER_ATOMIC) || "''",
-        b = Blockly.Arduino.variableDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
+        b = Blockly.Arduino.nameDB_.getName(this.getFieldValue("VAR"), Blockly.Variables.NAME_TYPE),
         c = Blockly.Arduino.statementToCode(this, "DO");
     a = "int " + b + ";\nsd_file = SD.open(" + (a + ", FILE_READ);\nif(sd_file){\n");
     a += "\twhile(sd_file.available()){\n";
@@ -5399,7 +5411,7 @@ Blockly.Arduino.infinite_loop = function() {
 Blockly.Arduino.time_runeveryms = function() {
     var a = Blockly.Arduino.statementToCode(this, "DO"),
         b = Blockly.Arduino.valueToCode(this, "MS", Blockly.Arduino.ORDER_ATOMIC) || "0",
-        c = Blockly.Arduino.variableDB_.getDistinctName("task_time_ms", Blockly.Variables.NAME_TYPE);
+        c = Blockly.Arduino.nameDB_.getDistinctName("task_time_ms", Blockly.Variables.NAME_TYPE);
     Blockly.Arduino.definitions_["var_" + c] = "unsigned long " + c + "=0;\n";
     a = "if((millis()-" + c + ")>=" + b + "){\n\t" + (c + "=millis();\n") + a;
     return a += "}\n"
