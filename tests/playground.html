@@ -546,7 +546,6 @@ var spaghettiXml = [
                 </block>
 
             </category>
-<!--
 
             <category name="Texto" colour="160">
                 <block type="text"></block>
@@ -578,12 +577,14 @@ var spaghettiXml = [
                 <block type="text_contains"></block>
                 <block type="text_indexof"></block>
                 <block type="text_substring"></block>
-                <block type="text_replace"></block>
+<!--
+//TypeError: Blockly.FieldVariableText is not a constructor
+                <block type="text_replace"></block>  
+-->
                 <block type="text_ascii"></block>
             </category>
 
             <category name="Variables" colour="330">
-
                 <block type="variables_set">
                     <value name="VALUE">
                         <shadow type="math_number">
@@ -592,22 +593,25 @@ var spaghettiXml = [
                     </value>
                 </block>
                 <block type="variables_get"></block>
-
+<!--
+Uncaught TypeError: Blockly.FieldVariableText is not a constructor
                 <block type="variables_set_text">
                     <value name="VALUE">
                         <shadow type="text"></shadow>
                     </value>
                 </block>
                 <block type="variables_get_text"></block>
-
                 <block type="variables_set_bool">
                     <value name="VALUE">
                         <shadow type="logic_boolean2"></shadow>
                     </value>
                 </block>
+Uncaught TypeError: Blockly.FieldVariableBool is not a constructor
                 <block type="variables_get_bool"></block>
+-->
             </category>
 
+<!--
             <category name="Listas" colour="330">
                 <block type="lists_create_with"></block>
                 <block type="lists_getIndex">
@@ -653,9 +657,9 @@ var spaghettiXml = [
                 </block>
                 <block type="lists_length_text"></block>
             </category>
-
-
+Uncaught TypeError: Blockly.Procedures.disposeCallers is not a function
             <category name="Funciones" custom="PROCEDURE" colour="270"></category>
+-->
 
             <sep></sep>
 
@@ -674,7 +678,8 @@ var spaghettiXml = [
                         </shadow>
                     </value>
                 </block>
-
+<!--
+Uncaught TypeError: Unknown block type: logic_boolean2
                 <block type="io_digital_read2">
                     <value name="PIN">
                         <shadow type="math_number">
@@ -694,6 +699,7 @@ var spaghettiXml = [
                         </shadow>
                     </value>
                 </block>
+-->
                 <block type="io_analog_read2">
                     <value name="PIN">
                         <shadow type="math_number">
@@ -713,7 +719,6 @@ var spaghettiXml = [
                         </shadow>
                     </value>
                 </block>
-
                 <block type="io_pulsein">
                     <field name="PIN">2</field>
                     <value name="TIMEOUT">
@@ -723,7 +728,6 @@ var spaghettiXml = [
                     </value>
                 </block>
                 <block type="io_interrupt"></block>
-
                 <block type="io_digital_read_i2c">
                     <field name="PIN">0</field>
                 </block>
@@ -768,10 +772,8 @@ var spaghettiXml = [
                         </shadow>
                     </value>
                 </block>
-
                 <block type="io_analog_read_i2c">
                 </block>
-
                 <block type="io_analog_read2_i2c">
                     <value name="PIN">
                         <shadow type="math_number">
@@ -780,7 +782,6 @@ var spaghettiXml = [
                     </value>
                 </block>
                 <block type="io_analog_read_dif_i2c"></block>
-
             </category>
 
             <category name="Tiempo" colour="110">
@@ -800,7 +801,6 @@ var spaghettiXml = [
                 </block>
                 <block type="time_millis"></block>
                 <block type="time_micros"></block>
-
                 <block type="time_runeveryms">
                     <value name="MS">
                         <shadow type="math_number">
@@ -809,10 +809,8 @@ var spaghettiXml = [
                     </value>
                 </block>
                 <block type="infinite_loop"></block>
-
                 <block type="time_timer"></block>
                 <block type="time_timer_reset"></block>
-
                 <block type="time_snooze">
                     <value name="DELAY_TIME_MILI">
                         <shadow type="math_number">
@@ -820,7 +818,6 @@ var spaghettiXml = [
                         </shadow>
                     </value>
                 </block>
-
             </category>
 
             <category name="Puerto serie" colour="170">
@@ -853,7 +850,6 @@ var spaghettiXml = [
                 <block type="serial_read_byte"></block>
                 <block type="serial_read_float"></block>
                 <block type="serial_interrupt"></block>
-
                 <block type="serial_plot">
                     <value name="PLOTVAR">
                         <shadow type="text">
@@ -866,7 +862,6 @@ var spaghettiXml = [
                         </shadow>
                     </value>
                 </block>
-
             </category>
 
             <category name="Bluetooth" colour="190">
@@ -912,9 +907,7 @@ var spaghettiXml = [
                         </shadow>
                     </value>
                 </block>
-
             </category>
-
 
             <category name="Sensores" colour="230">
                 <block type="sensor_potentiometer"></block>
@@ -942,12 +935,10 @@ var spaghettiXml = [
                     <field name="TRIGGER_PIN">2</field>
                     <field name="ECHO_PIN">3</field>
                 </block>
-
                 <block type="sensor_irremote_decode_txt">
                     <field name="PIN">11</field>
                 </block>
                 <block type="sensor_irremote_keys_txt"></block>
-
                 <block type="sensor_rotary_encoder"></block>
                 <block type="sensor_rotary_encoder_set2">
                     <value name="POS">
@@ -976,10 +967,8 @@ var spaghettiXml = [
                     <field name="PIN">2</field>
                 </block>
                 <block type="sensor_soilhumidity">
-
                 </block>
                 <block type="sensor_water">
-
                 </block>
                 <block type="sensor_knock">
                     <field name="PIN">2</field>
@@ -1001,22 +990,18 @@ var spaghettiXml = [
                 <block type="sensor_lm35"></block>
                 <block type="sensor_tmp36"></block>
                 <block type="sensor_nunchuk"></block>
-
                 <block type="sensor_pm25">
                     <field name="LED">2</field>
                     <field name="OUT">A0</field>
                 </block>
-
                 <block type="sensor_mics4514">
                     <field name="PRE">2</field>
                     <field name="NOX">A0</field>
                     <field name="RED">A1</field>
                 </block>
-
                 <block type="sensor_color_tcs34725"></block>
                 <block type="sensor_color_tcs34725_value"></block>
                 <block type="sensor_color_tcs34725_iscolor"></block>
-
                 <block type="sensor_bmp180">
                     <field name="PIN">2</field>
                 </block>
@@ -1028,16 +1013,16 @@ var spaghettiXml = [
                 <block type="sensor_paj7620_gesture"></block>
                 <block type="sensor_MLX90614"></block>
                 <block type="sensor_VL53L0X"></block>
-
                 <block type="sensor_irremote_decode">
                     <field name="PIN">11</field>
                 </block>
                 <block type="sensor_irremote_keys"></block>
                 <block type="sensor_irremote_keys2"></block>
 
-
             </category>
-
+<!--
+OjO, error con algun bloque Uncaught TypeError: b.getOptions_ is not a function
+-->
             <category name="Actuadores" colour="15">
                 <block type="actuator_led">
                     <field name="PIN">2</field>
@@ -1148,7 +1133,6 @@ var spaghettiXml = [
                     <field name="CURSOR_COLUMN">0</field>
                     <field name="CURSOR_ROW">0</field>
                 </block>
-
                 <block type="lcd_print2">
                     <value name="CURSOR_COLUMN">
                         <shadow type="math_number">
@@ -1166,7 +1150,6 @@ var spaghettiXml = [
                         </shadow>
                     </value>
                 </block>
-
                 <block type="lcd_print2_customchar">
                     <value name="CURSOR_COLUMN">
                         <shadow type="math_number">
@@ -1179,17 +1162,13 @@ var spaghettiXml = [
                         </shadow>
                     </value>
                 </block>
-
                 <block type="lcd_backlight">
                 </block>
-
                 <block type="lcd_cursor">
                 </block>
-
                 <block type="lcd_display">
                 </block>
                 <block type="lcd_scroll"></block>
-
             </category>
 
             <category name="Pantalla OLED" colour="160">
@@ -1667,6 +1646,7 @@ var spaghettiXml = [
                 </block>
             </category>
 
+<!--
             <category name="MQTT (IoT)" colour="190">
 
                 <block type="mqtt_init">
@@ -1714,6 +1694,7 @@ var spaghettiXml = [
                 <block type="mqtt_adafruit_sub"></block>
 
             </category>
+-->
 
             <category name="Blynk (IoT)" colour="215">
 
@@ -2008,9 +1989,66 @@ var spaghettiXml = [
                         </shadow>
                     </value>
                 </block>
+<!--
+Uncaught TypeError: Blockly.FieldCheckbox2 is not a constructor
                 <block type="ledmatrix_drawmatrix"></block>
-            </category>
 -->
+            </category>
+            <category name="MP3" colour="58">
+                <block type="mp3_init">
+                    <field name="RX">2</field>
+                    <field name="TX">3</field>
+                </block>
+                <block type="mp3_volume">
+                    <value name="VOLUME">
+                        <shadow type="math_number">
+                            <field name="NUM">30</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="mp3_eq"></block>
+
+                <block type="mp3_play_folderfile">
+                    <value name="FOLDER">
+                        <shadow type="math_number">
+                            <field name="NUM">1</field>
+                        </shadow>
+                    </value>
+                    <value name="FILE">
+                        <shadow type="math_number">
+                            <field name="NUM">1</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="mp3_control"></block>
+                <block type="mp3_reset"></block>
+            </category>
+
+
+            <category name="Domótica" colour="250">
+
+                <block type="domotics_pzem004t_v30_init">
+                    <field name="RX">2</field>
+                    <field name="TX">3</field>
+                    <value name="ADDR">
+                        <shadow type="math_number">
+                            <field name="NUM">248</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="domotics_pzem004t_v30_value"></block>
+                <block type="domotics_pzem004t_v30_setaddress">
+                    <value name="ADDR">
+                        <shadow type="math_number">
+                            <field name="NUM">248</field>
+                        </shadow>
+                    </value>
+                </block>
+
+                <block type="domotics_ina219_init"></block>
+                <block type="domotics_ina219_value"></block>
+            </category>
+
   </xml>
 
   <!-- toolbox-categories-typed-variables has a category menu and an
@@ -2354,7 +2392,7 @@ var spaghettiXml = [
     <sep></sep>
     <category name="Variables" categorystyle="variable_category" custom="VARIABLE_DYNAMIC"></category>
     <category name="Functions" categorystyle="procedure_category" custom="PROCEDURE"></category>
-  </xml>
 -->
+  </xml>
 </body>
 </html>
