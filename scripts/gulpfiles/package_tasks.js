@@ -357,6 +357,24 @@ function packageReadme() {
 };
 
 /**
+ * This task copies the screenshoot.js file into the distribution directory.
+ * This file is what developers will see at https://www.npmjs.com/package/blockly.
+ */
+ function packageScreenshoot() {
+  return gulp.src('./screenshoot.js')
+    .pipe(gulp.dest(`${packageDistribution}`));
+};
+
+/**
+ * This task copies the screenshoot.js file into the distribution directory.
+ * This file is what developers will see at https://www.npmjs.com/package/blockly.
+ */
+ function packageAppEngine() {
+  return gulp.src('./appengine/*')
+    .pipe(gulp.dest(`${packageDistribution}/appengine`));
+};
+
+/**
  * This task copies the typings/blockly.d.ts TypeScript definition file into the
  * distribution directory.
  * The bundled declaration file is referenced in package.json in the types property.
@@ -389,6 +407,8 @@ const package = gulp.parallel(
   packageUMDBundle,
   packageJSON,
   packageReadme,
+  packageScreenshoot,
+  packageAppEngine,
   packageDTS
 );
 
