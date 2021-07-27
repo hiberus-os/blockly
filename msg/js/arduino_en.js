@@ -2,10 +2,6 @@
 
 'use strict';
 
-// goog.provide('Blockly.Msg.en');
-
-// goog.require('Blockly.Msg');
-
 Blockly.Msg.ACTUATOR_BUZZER = "Buzzer";
 Blockly.Msg.ACTUATOR_BUZZER_FREQ = "Hz";
 Blockly.Msg.ACTUATOR_BUZZER_TONE = "Tone";

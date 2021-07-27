@@ -17,9 +17,10 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+goog.require('Blockly.ComponentManager');
 goog.require('Blockly.connectionTypes');
+goog.require('Blockly.constants');
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
@@ -60,10 +61,11 @@ goog.requireType('Blockly.Workspace');
 
 /**
  * Blockly core version.
- * This constant is overridden by the build script (build.py) to the value of the version
- * in package.json. This is done during the gen_core build step.
- * For local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the compiler
- * to override this constant.
+ * This constant is overridden by the build script (npm run build) to the value
+ * of the version in package.json. This is done by the Closure Compiler in the
+ * buildCompressed gulp task.
+ * For local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the
+ * compiler to override this constant.
  * @define {string}
  */
 Blockly.VERSION = 'uncompiled';
@@ -83,7 +85,7 @@ Blockly.selected = null;
 
 /**
  * All of the connections on blocks that are currently being dragged.
- * @type {!Array.<!Blockly.Connection>}
+ * @type {!Array<!Blockly.Connection>}
  * @package
  */
 Blockly.draggingConnections = [];
@@ -133,10 +135,10 @@ Blockly.svgSize = function(svg) {
   // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
   // from setCachedParentSvgSize.
   Blockly.utils.deprecation.warn(
-    'Blockly.svgSize',
-    'March 2021',
-    'March 2022',
-    'workspace.getCachedParentSvgSize');
+      'Blockly.svgSize',
+      'March 2021',
+      'March 2022',
+      'workspace.getCachedParentSvgSize');
   svg = /** @type {?} */ (svg);
   return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
 };
@@ -216,7 +218,12 @@ Blockly.deleteBlock = function(selected) {
   if (!selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
-    selected.dispose(/* heal */ true, true);
+    if (selected.outputConnection) {
+      // Do not attempt to heal rows (https://github.com/google/blockly/issues/4832)
+      selected.dispose(false, true);
+    } else {
+      selected.dispose(/* heal */ true, true);
+    }
     Blockly.Events.setGroup(false);
   }
 };
@@ -294,27 +301,20 @@ Blockly.onContextMenu_ = function(e) {
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
- * @param {boolean=} opt_allowToolbox If true, don't close the toolbox.
+ * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
  */
-Blockly.hideChaff = function(opt_allowToolbox) {
+Blockly.hideChaff = function(opt_onlyClosePopups) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   Blockly.DropDownDiv.hideWithoutAnimation();
-  if (!opt_allowToolbox) {
-    var workspace = Blockly.getMainWorkspace();
-    // For now the trashcan flyout always autocloses because it overlays the
-    // trashcan UI (no trashcan to click to close it).
-    if (workspace.trashcan &&
-      workspace.trashcan.flyout) {
-      workspace.trashcan.closeFlyout();
-    }
-    var toolbox = workspace.getToolbox();
-    if (toolbox &&
-        toolbox.getFlyout() &&
-        toolbox.getFlyout().autoClose) {
-      toolbox.clearSelection();
-    }
-  }
+
+  var onlyClosePopups = !!opt_onlyClosePopups;
+  var workspace = Blockly.getMainWorkspace();
+  var autoHideables = workspace.getComponentManager().getComponents(
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
+  autoHideables.forEach(function(autoHideable) {
+    autoHideable.autoHide(onlyClosePopups);
+  });
 };
 
 /**
@@ -380,25 +380,25 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
- * @param {!Array.<!Object>} jsonArray An array of JSON block definitions.
+ * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
  */
 Blockly.defineBlocksWithJsonArray = function(jsonArray) {
   for (var i = 0; i < jsonArray.length; i++) {
     var elem = jsonArray[i];
     if (!elem) {
       console.warn(
-        'Block definition #' + i + ' in JSON array is ' + elem + '. ' +
+          'Block definition #' + i + ' in JSON array is ' + elem + '. ' +
           'Skipping.');
     } else {
       var typename = elem.type;
       if (typename == null || typename === '') {
         console.warn(
-          'Block definition #' + i +
+            'Block definition #' + i +
             ' in JSON array is missing a type attribute. Skipping.');
       } else {
         if (Blockly.Blocks[typename]) {
           console.warn(
-            'Block definition #' + i + ' in JSON array' +
+              'Block definition #' + i + ' in JSON array' +
               ' overwrites prior definition of "' + typename + '".');
         }
         Blockly.Blocks[typename] = {
@@ -425,7 +425,7 @@ Blockly.isNumber = function(str) {
  */
 Blockly.hueToHex = function(hue) {
   return Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
-    Blockly.HSV_VALUE * 255);
+      Blockly.HSV_VALUE * 255);
 };
 
 /**
@@ -436,38 +436,38 @@ Blockly.hueToHex = function(hue) {
  */
 Blockly.checkBlockColourConstants = function() {
   Blockly.checkBlockColourConstant_(
-    'LOGIC_HUE', ['Blocks', 'logic', 'HUE'], undefined);
+      'LOGIC_HUE', ['Blocks', 'logic', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-    'LOGIC_HUE', ['Constants', 'Logic', 'HUE'], 210);
+      'LOGIC_HUE', ['Constants', 'Logic', 'HUE'], 210);
   Blockly.checkBlockColourConstant_(
-    'LOOPS_HUE', ['Blocks', 'loops', 'HUE'], undefined);
+      'LOOPS_HUE', ['Blocks', 'loops', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-    'LOOPS_HUE', ['Constants', 'Loops', 'HUE'], 120);
+      'LOOPS_HUE', ['Constants', 'Loops', 'HUE'], 120);
   Blockly.checkBlockColourConstant_(
-    'MATH_HUE', ['Blocks', 'math', 'HUE'], undefined);
+      'MATH_HUE', ['Blocks', 'math', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-    'MATH_HUE', ['Constants', 'Math', 'HUE'], 230);
+      'MATH_HUE', ['Constants', 'Math', 'HUE'], 230);
   Blockly.checkBlockColourConstant_(
-    'TEXTS_HUE', ['Blocks', 'texts', 'HUE'], undefined);
+      'TEXTS_HUE', ['Blocks', 'texts', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-    'TEXTS_HUE', ['Constants', 'Text', 'HUE'], 160);
+      'TEXTS_HUE', ['Constants', 'Text', 'HUE'], 160);
   Blockly.checkBlockColourConstant_(
-    'LISTS_HUE', ['Blocks', 'lists', 'HUE'], undefined);
+      'LISTS_HUE', ['Blocks', 'lists', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-    'LISTS_HUE', ['Constants', 'Lists', 'HUE'], 260);
+      'LISTS_HUE', ['Constants', 'Lists', 'HUE'], 260);
   Blockly.checkBlockColourConstant_(
-    'COLOUR_HUE', ['Blocks', 'colour', 'HUE'], undefined);
+      'COLOUR_HUE', ['Blocks', 'colour', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-    'COLOUR_HUE', ['Constants', 'Colour', 'HUE'], 20);
+      'COLOUR_HUE', ['Constants', 'Colour', 'HUE'], 20);
   Blockly.checkBlockColourConstant_(
-    'VARIABLES_HUE', ['Blocks', 'variables', 'HUE'], undefined);
+      'VARIABLES_HUE', ['Blocks', 'variables', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-    'VARIABLES_HUE', ['Constants', 'Variables', 'HUE'], 330);
+      'VARIABLES_HUE', ['Constants', 'Variables', 'HUE'], 330);
   // Blockly.Blocks.variables_dynamic.HUE never existed.
   Blockly.checkBlockColourConstant_(
-    'VARIABLES_DYNAMIC_HUE', ['Constants', 'VariablesDynamic', 'HUE'], 310);
+      'VARIABLES_DYNAMIC_HUE', ['Constants', 'VariablesDynamic', 'HUE'], 310);
   Blockly.checkBlockColourConstant_(
-    'PROCEDURES_HUE', ['Blocks', 'procedures', 'HUE'], undefined);
+      'PROCEDURES_HUE', ['Blocks', 'procedures', 'HUE'], undefined);
   // Blockly.Constants.Procedures.HUE never existed.
 };
 
@@ -475,13 +475,13 @@ Blockly.checkBlockColourConstants = function() {
  * Checks for a constant in the Blockly namespace, verifying it is undefined or
  * has the old/original value. Prints a warning if this is not true.
  * @param {string} msgName The Msg constant identifier.
- * @param {Array.<string>} blocklyNamePath The name parts of the tested
+ * @param {!Array<string>} blocklyNamePath The name parts of the tested
  *     constant.
  * @param {number|undefined} expectedValue The expected value of the constant.
  * @private
  */
 Blockly.checkBlockColourConstant_ = function(
-  msgName, blocklyNamePath, expectedValue) {
+    msgName, blocklyNamePath, expectedValue) {
   var namePath = 'Blockly';
   var value = Blockly;
   for (var i = 0; i < blocklyNamePath.length; ++i) {
@@ -493,8 +493,8 @@ Blockly.checkBlockColourConstant_ = function(
 
   if (value && value !== expectedValue) {
     var warningPattern = (expectedValue === undefined) ?
-      '%1 has been removed. Use Blockly.Msg["%2"].' :
-      '%1 is deprecated and unused. Override Blockly.Msg["%2"].';
+        '%1 has been removed. Use Blockly.Msg["%2"].' :
+        '%1 is deprecated and unused. Override Blockly.Msg["%2"].';
     var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
     console.warn(warning);
   }

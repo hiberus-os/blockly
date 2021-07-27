@@ -362,7 +362,13 @@ function packageReadme() {
  */
  function packageScreenshoot() {
   return gulp.src('./screenshoot.js')
-    .pipe(gulp.dest(`${packageDistribution}`));
+    .pipe(packageCommonJS('Blockly', [{
+        name: 'Blockly',
+        amd: './blockly',
+        cjs: './blockly',
+      }]))
+    // .pipe(gulp.rename('core.js'))
+    .pipe(gulp.dest(packageDistribution));
 };
 
 /**
