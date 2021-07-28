@@ -122,12 +122,12 @@ Blockly.Msg.ENABLE_BLOCK = 'Enable Block';
 /** @type {string} */
 /// context menu - Provide helpful information about the selected block.\n{{Identical|Help}}
 Blockly.Msg.HELP = 'Help';
-// /** @type {string} */
-// /// context menu - Undo the previous action.\n{{Identical|Undo}}
-// Blockly.Msg.UNDO = 'Undo';
-// /** @type {string} */
-// /// context menu - Undo the previous undo action.\n{{Identical|Redo}}
-// Blockly.Msg.REDO = 'Redo';
+/** @type {string} */
+/// context menu - Undo the previous action.\n{{Identical|Undo}}
+Blockly.Msg.UNDO = 'Undo';
+/** @type {string} */
+/// context menu - Undo the previous undo action.\n{{Identical|Redo}}
+Blockly.Msg.REDO = 'Redo';
 
 // Variable renaming.
 /** @type {string} */
