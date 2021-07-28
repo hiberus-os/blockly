@@ -828,5 +828,7 @@
 	"CONTROLS_FOR_INPUT_DO": "hacer",
 	"LISTS_CREATE_WITH_ITEM_TITLE": "varNum",
 	"MATH_CHANGE_TITLE_ITEM": "varNum",
-	"PROCEDURES_DEFRETURN_COMMENT": "Describe esta función..."
+	"PROCEDURES_DEFRETURN_COMMENT": "Describe esta función...",
+	"UNDO": "Deshacer",
+	"REDO": "Repetir"
 }
