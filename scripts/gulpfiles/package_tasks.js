@@ -328,7 +328,7 @@ function packageUMDBundle() {
  * This task copies all the media/* files into the distribution directory.
  */
 function packageMedia() {
-  return gulp.src('./media/*')
+  return gulp.src('./media/**/**')
     .pipe(gulp.dest(`${packageDistribution}/media`));
 };
 
