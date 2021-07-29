@@ -147,7 +147,7 @@ function updateBetaVersion(done) {
 // Package and publish to npm.
 const publish = gulp.series(
   packageTasks.package,
-  checkBranch,
+  // checkBranch,
   checkDist,
   loginAndPublish
 );
