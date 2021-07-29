@@ -33,7 +33,7 @@ jobs:
         # Defaults to the user or organization that owns the workflow file
         scope: '@hiberus-os'
 
-        - run: npm install
+    - run: npm install
 
     - run: npm publish
       env:
