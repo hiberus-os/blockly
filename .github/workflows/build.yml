@@ -39,9 +39,9 @@ jobs:
     # - name: Run
     #   run: npm run test
     - uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          registry: PACKAGE-REGISTRY.pkg.github.com
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        registry: PACKAGE-REGISTRY.pkg.github.com
 
       env:
         CI: true
