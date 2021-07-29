@@ -3,41 +3,66 @@
 
 name: Node.js CI
 
-on: [pull_request]
+on: [push]
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+  #   runs-on: ${{ matrix.os }}
 
-    strategy:
-      matrix:
-        # TODO (#2114): re-enable osx build.
-        # os: [ubuntu-latest, macos-latest]
-        os: [ubuntu-latest]
-        node-version: [10.x, 12.x, 14.x, 16.x]
+  #   strategy:
+  #     matrix:
+  #       # TODO (#2114): re-enable osx build.
+  #       # os: [ubuntu-latest, macos-latest]
+  #       os: [ubuntu-latest]
+  #       node-version: [12.x]
+        # node-version: [10.x, 12.x, 14.x, 16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    # - name: Use Node.js ${{ matrix.node-version }}
+    #   uses: actions/setup-node@v1
+    #   with:
+    #     node-version: ${{ matrix.node-version }}
+    - uses: actions/setup-node@v2
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '12.x'
+        registry-url: 'https://npm.pkg.github.com'
+        # Defaults to the user or organization that owns the workflow file
+        scope: '@hiberus-os'
 
-    - name: Npm Install
-      run: npm install
-
-    - name: Linux Test Setup
-      if: runner.os == 'Linux'
-      run: source ./tests/scripts/setup_linux_env.sh
-
-    - name: MacOS Test Setup
-      if: runner.os == 'macOS'
-      run: source ./tests/scripts/setup_osx_env.sh
-
-    - name: Run
-      run: npm run test
-
+    - name: "Automated Version Bump"
+      uses: "phips28/gh-action-bump-version@master"
+      with:
+        tag-prefix: ''
       env:
-        CI: true
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - run: npm install
+
+    - run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # - name: Npm Install
+    #   run: npm install
+
+    # - name: Linux Test Setup
+    #   if: runner.os == 'Linux'
+    #   run: source ./tests/scripts/setup_linux_env.sh
+
+    # - name: MacOS Test Setup
+    #   if: runner.os == 'macOS'
+    #   run: source ./tests/scripts/setup_osx_env.sh
+
+    # - name: Run
+    #   run: npm run test
+    # - uses: JS-DevTools/npm-publish@v1
+    #   with:
+    #     token: ${{ secrets.TOKEN }}
+    #     registry: npm.pkg.github.com
+
+      # env:
+      #   CI: true
