@@ -6,15 +6,15 @@ name: Node.js CI
 on: [push]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
+  # build:
+  #   runs-on: ${{ matrix.os }}
 
-    strategy:
-      matrix:
-        # TODO (#2114): re-enable osx build.
-        # os: [ubuntu-latest, macos-latest]
-        os: [ubuntu-latest]
-        node-version: [12.x]
+  #   strategy:
+  #     matrix:
+  #       # TODO (#2114): re-enable osx build.
+  #       # os: [ubuntu-latest, macos-latest]
+  #       os: [ubuntu-latest]
+  #       node-version: [12.x]
         # node-version: [10.x, 12.x, 14.x, 16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
