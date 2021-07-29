@@ -46,7 +46,7 @@
     "typings": "gulp typings",
     "updateGithubPages": "gulp gitUpdateGithubPages"
   },
-  "main": "./index.js",
+  "main": "./dist/index.js",
   "umd": "./blockly.min.js",
   "unpkg": "./blockly.min.js",
   "types": "./index.d.ts",
