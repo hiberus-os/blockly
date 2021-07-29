@@ -203,6 +203,9 @@ function packageNode() {
       }, {
         name: 'BlocklyDart',
         cjs: './dart',
+      }, {
+        name: 'BlocklyArduino',
+        cjs: './arduino',
       }]))
     .pipe(gulp.rename('node.js'))
     .pipe(gulp.dest(packageDistribution));
