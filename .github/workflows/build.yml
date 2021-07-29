@@ -57,5 +57,5 @@ jobs:
     #     token: ${{ secrets.TOKEN }}
     #     registry: npm.pkg.github.com
 
-      env:
-        CI: true
+      # env:
+      #   CI: true
