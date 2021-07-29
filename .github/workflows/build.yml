@@ -42,8 +42,8 @@ jobs:
     #   run: npm run test
     - uses: JS-DevTools/npm-publish@v1
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        registry: PACKAGE-REGISTRY.pkg.github.com
+        token: ${{ secrets.TOKEN }}
+        registry: npm.pkg.github.com
 
       env:
         CI: true
