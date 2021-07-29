@@ -149,7 +149,7 @@ const publish = gulp.series(
   packageTasks.package,
   // checkBranch,
   checkDist,
-  loginAndPublish
+  // loginAndPublish
 );
 
 // Publish a beta version of Blockly.
