@@ -1,5 +1,5 @@
 {
-  "name": "blockly",
+  "name": "@hiberus-os/blockly",
   "version": "6.20210701.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
